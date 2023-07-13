@@ -13,6 +13,14 @@
         android:theme="@style/Theme.CoroutineFlow"
         tools:targetApi="31">
         <activity
+            android:name=".lesson2.Users2Activity"
+            android:exported="false"
+            android:label="@string/title_activity_users2"
+            android:theme="@style/Theme.CoroutineFlow" />
+        <activity
+            android:name=".lesson2.UsersActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

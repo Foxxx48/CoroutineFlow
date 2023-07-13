@@ -1,4 +1,4 @@
-package com.foxxx.coroutineflow.Lesson1
+package com.foxxx.coroutineflow.lesson1
 
 fun main() {
     val numbers = listOf(3, 4, 8, 16, 5, 7, 11, 32, 41, 28, 43, 47, 84, 116, 53, 59, 61).asSequence()
