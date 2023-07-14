@@ -20,7 +20,6 @@ private fun getFlowByFlowOfBuilder(): Flow<Int> {
 
 private fun getFlowByBuilderFlow(): Flow<Int> {
     val flowA = getFlowByFlowOfBuilder()
-
     return flow {
         flowA.collect {
             println("Emitted from first flow: $it")

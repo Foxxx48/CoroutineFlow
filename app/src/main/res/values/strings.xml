@@ -12,6 +12,10 @@
     <string name="users_activity">Users Activity</string>
     <string name="launch_next_screen">Launch next screen</string>
 
+
+    <string name="currency_price">$%s</string>
+    <string name="crypto_activity">Crypto Activity</string>
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
