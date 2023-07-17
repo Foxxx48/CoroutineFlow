@@ -8,6 +8,7 @@ suspend fun main() {
     val numbers = getFlowByBuilderFlow()
     numbers.collect() {
         println(it)
+
     }
 
 
