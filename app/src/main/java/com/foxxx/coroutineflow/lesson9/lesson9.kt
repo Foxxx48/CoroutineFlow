@@ -1,17 +1,24 @@
-package com.foxxx.coroutineflow.lesson8
+package com.foxxx.coroutineflow.lesson9
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-suspend fun main() {
+private suspend fun main() {
 
-    val flow = getNumbersFlow()
+    val flow = MutableSharedFlow<Int>()
+
+    coroutineScope.launch {
+        repeat(10) {
+            println("Emitted: $it")
+            flow.emit(it)
+            delay(1000)
+        }
+    }
 
     val job1 = coroutineScope.launch() {
         flow.collect {
@@ -31,10 +38,3 @@ suspend fun main() {
     job2.join()
 }
 
-suspend fun getNumbersFlow(): Flow<Int> = flow {
-    repeat(10) {
-        println("Emited: $it")
-        emit(it)
-        delay(1000)
-    }
-}
