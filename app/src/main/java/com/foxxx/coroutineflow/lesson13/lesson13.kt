@@ -15,12 +15,14 @@ suspend fun main() {
             repeat(10) {
                 println("Emitted: $it")
                 emit(it)
-                delay(1000)
+                println("After emit: $it")
+                delay(200)
 
             }
         }
         flow.collect{
             println("Collected: $it")
+            delay(1000)
         }
     }
 
