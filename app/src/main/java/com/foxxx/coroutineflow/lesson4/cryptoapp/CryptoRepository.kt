@@ -1,9 +1,12 @@
 package com.foxxx.coroutineflow.lesson4.cryptoapp
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlin.random.Random
 
 object CryptoRepository {
@@ -11,10 +14,12 @@ object CryptoRepository {
     private val cryptoCurrencyNames = listOf("BTC", "ETH", "USDT", "BNB", "USDC")
     private val cryptoCurrencyList = mutableListOf<CryptoCurrency>()
 
+    private val scope = CoroutineScope(Dispatchers.Default)
+
     private val refreshEvents = MutableSharedFlow<Unit>()
 
 
-    fun getCurrencyListFlow(): Flow<List<CryptoCurrency>> = flow {
+    val getCurrencyListFlow = flow {
         delay(3000)
         getCurrencyList()
         emit(cryptoCurrencyList.toList())
@@ -23,7 +28,11 @@ object CryptoRepository {
             generateCurrencyList()
             emit(cryptoCurrencyList.toList())
         }
-    }
+    }.stateIn(
+        scope = scope,
+        started = SharingStarted.Lazily,
+        initialValue = cryptoCurrencyList.toList()
+    )
 
     suspend fun refreshList() {
         refreshEvents.emit(Unit)

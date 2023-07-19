@@ -66,6 +66,24 @@ class CryptoActivity : AppCompatActivity() {
                         }
                     }
                 }
+
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.state.collect {
+                    when (it) {
+                        is CryptoState.Content -> {
+                            Log.d(
+                                "CryptoApp", it.cryptoCurrencyList.joinToString()
+                            )
+                        }
+
+                        else -> {}
+                    }
+
+                }
             }
         }
     }

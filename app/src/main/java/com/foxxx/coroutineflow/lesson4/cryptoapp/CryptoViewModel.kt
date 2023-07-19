@@ -18,8 +18,8 @@ class CryptoViewModel : ViewModel() {
     private val loadingFlow = MutableSharedFlow<CryptoState>()
 
 
-    var state =
-        repository.getCurrencyListFlow()
+    val state =
+        repository.getCurrencyListFlow
             .filter { it.isNotEmpty() }
             .map { CryptoState.Content(cryptoCurrencyList = it) as CryptoState }
             .onStart {
