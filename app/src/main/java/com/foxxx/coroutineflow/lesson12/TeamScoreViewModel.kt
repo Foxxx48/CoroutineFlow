@@ -6,19 +6,41 @@ import androidx.lifecycle.ViewModel
 
 class TeamScoreViewModel : ViewModel() {
 
-    private val _team1Score = MutableLiveData(0)
-    val team1Score: LiveData<Int> = _team1Score
+    private val _state = MutableLiveData<TeamScoreState>(TeamScoreState.Game(0, 0))
+    val state: LiveData<TeamScoreState> = _state
+    
+    fun increaseScore(team: Team) {
+        val currentState = _state.value
+        if (currentState is TeamScoreState.Game) {
+            if (team == Team.TEAM_1) {
+                val oldValue = currentState.score1
+                val newValue = oldValue + 1
+                _state.value = currentState.copy(score1 = newValue)
 
-    private val _team2Score = MutableLiveData(0)
-    val team2Score: LiveData<Int> = _team2Score
+                if (newValue >= WINNER_SCORE) {
+                    _state.value = TeamScoreState.Winner(
+                        winnerTeam = Team.TEAM_1,
+                        score1 = newValue,
+                        score2 = currentState.score2
+                    )
+                }
+            } else {
+                val oldValue = currentState.score2
+                val newValue = oldValue + 1
+                _state.value = currentState.copy(score2 = newValue)
 
-    fun increaseScore1() {
-        val oldValue = team1Score.value ?: 0
-        _team1Score.value = oldValue + 1
+                if (newValue >= WINNER_SCORE) {
+                    _state.value = TeamScoreState.Winner(
+                        winnerTeam = Team.TEAM_2,
+                        score1 = currentState.score1,
+                        score2 = newValue
+                    )
+                }
+            }
+        }
     }
 
-    fun increaseScore2() {
-        val oldValue = team2Score.value ?: 0
-        _team2Score.value = oldValue + 1
+    companion object {
+        const val WINNER_SCORE = 7
     }
 }
