@@ -5,8 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.foxxx.coroutineflow.databinding.ActivityTeamScoreBinding
+import kotlinx.coroutines.launch
 
 class TeamScoreActivity : AppCompatActivity() {
 
@@ -26,21 +30,25 @@ class TeamScoreActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.state.observe(this) {
-            when (it) {
-                is TeamScoreState.Game -> {
-                    binding.team1Score.text = it.score1.toString()
-                    binding.team2Score.text = it.score2.toString()
-                }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.stateSharedFlow.collect {
+                    when (it) {
+                        is TeamScoreState.Game -> {
+                            binding.team1Score.text = it.score1.toString()
+                            binding.team2Score.text = it.score2.toString()
+                        }
 
-                is TeamScoreState.Winner -> {
-                    binding.team1Score.text = it.score1.toString()
-                    binding.team2Score.text = it.score2.toString()
-                    Toast.makeText(
-                        this,
-                        "Winner: ${it.winnerTeam}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        is TeamScoreState.Winner -> {
+                            binding.team1Score.text = it.score1.toString()
+                            binding.team2Score.text = it.score2.toString()
+                            Toast.makeText(
+                                this@TeamScoreActivity,
+                                "Winner: ${it.winnerTeam}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
             }
         }
@@ -48,15 +56,14 @@ class TeamScoreActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.team1Logo.setOnClickListener {
-            viewModel.increaseScore(Team.TEAM_1)
+            viewModel.increaseScoreWithFlow(Team.TEAM_1)
         }
         binding.team2Logo.setOnClickListener {
-            viewModel.increaseScore(Team.TEAM_2)
+            viewModel.increaseScoreWithFlow(Team.TEAM_2)
         }
     }
 
     companion object {
-
         fun newIntent(context: Context) = Intent(context, TeamScoreActivity::class.java)
     }
 }

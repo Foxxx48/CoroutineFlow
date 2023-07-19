@@ -13,6 +13,7 @@ object CryptoRepository {
 
     private val refreshEvents = MutableSharedFlow<Unit>()
 
+
     fun getCurrencyListFlow(): Flow<List<CryptoCurrency>> = flow {
         delay(3000)
         getCurrencyList()

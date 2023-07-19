@@ -39,7 +39,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="@string/team_2"
         android:textAlignment="center"
         android:textColor="@android:color/holo_blue_light"
         android:textSize="24sp"
