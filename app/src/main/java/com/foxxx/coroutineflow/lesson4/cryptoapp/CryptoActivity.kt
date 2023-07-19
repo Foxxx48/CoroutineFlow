@@ -51,14 +51,17 @@ class CryptoActivity : AppCompatActivity() {
                     when (it) {
                         is CryptoState.Initial -> {
                             binding.progressBarLoading.isVisible = false
+                            binding.btnRefresh.isEnabled = false
                         }
 
                         is CryptoState.Loading -> {
                             binding.progressBarLoading.isVisible = true
+                            binding.btnRefresh.isEnabled = false
                         }
 
                         is CryptoState.Content -> {
                             binding.progressBarLoading.isVisible = false
+                            binding.btnRefresh.isEnabled = true
                             adapter.submitList(it.cryptoCurrencyList)
                         }
                     }
